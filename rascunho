@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.historiaevents</groupId>
+    <artifactId>cesarprojeto</artifactId>
+    <version>1.0</version>
+    <name>cesarprojeto</name>
+    <url>http://www.example.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source> <!-- Atualizado para Java 17 -->
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- Dependência do JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dependência do MySQL Connector (Corrigido) -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.3.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Plugin para compilar código Java -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para definir a classe principal no JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.historiaevents.MainApp</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para empacotar dependências no JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.historiaevents</groupId>
+    <artifactId>cesarprojeto</artifactId>
+    <version>1.0</version>
+    <name>cesarprojeto</name>
+    <url>http://www.example.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- Dependência do JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.2</version> <!-- Atualizado para JUnit 5 -->
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version> <!-- JUnit 5 API -->
+            <scope>test</scope>
+        </dependency>
+        <!-- Dependência do MySQL Connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+            <!-- Plugin para Spring Boot (descomente se necessário) -->
+            <!--
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.5.4</version>
+            </plugin>
+            -->
+        </plugins>
+    </build>
+</project> 
+
+
+
+
+
+
+package com.historiaevents.view;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.time.LocalDate;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import com.historiaevents.controller.EventController;
+import com.historiaevents.model.Event;
+
+public class EventGUI {
+    private EventController eventController;
+    private JFrame frame;
+    private JTable table;
+    private DefaultTableModel tableModel;
+
+    public EventGUI(EventController eventController) {
+
+        this.eventController = eventController;
+
+        initialize();
+        System.out.println("hello worl");
+    }
+
+    private void initialize() {
+        frame = new JFrame("Gerador de Eventos Históricos");
+        frame.setSize(600, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        String[] columnNames = { "Nome", "Data", "Descrição" }; // Colunas ajustadas
+        tableModel = new DefaultTableModel(columnNames, 0);
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+        frame.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+
+        JButton addButton = new JButton("Adicionar Evento");
+        JButton removeButton = new JButton("Remover Evento");
+        JButton generateButton = new JButton("Gerar Evento");
+
+        addButton.setPreferredSize(new Dimension(150, 30));
+        removeButton.setPreferredSize(new Dimension(150, 30));
+        generateButton.setPreferredSize(new Dimension(150, 30));
+
+        buttonPanel.add(addButton);
+        buttonPanel.add(removeButton);
+        buttonPanel.add(generateButton);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+
+        addButton.addActionListener(e -> addEvent());
+        removeButton.addActionListener(e -> removeEvent());
+        generateButton.addActionListener(e -> generateEvent());
+
+        frame.setVisible(true);
+        loadEvents(); // Carrega os eventos ao iniciar a interface
+    }
+
+    private void loadEvents() {
+        tableModel.setRowCount(0); // Limpa a tabela antes de carregar
+        for (Event event : eventController.getAllEvents()) {
+            tableModel.addRow(new Object[] {
+                    event.getNome(),
+                    event.getData().format(Event.DATE_FORMATTER), // Atualizado para usar getData()
+                    event.getDescricao()
+            });
+        }
+    }
+
+    private Event collectEventData() {
+        String nome = JOptionPane.showInputDialog(frame, "Nome do Evento:");
+        String dataStr = JOptionPane.showInputDialog(frame, "Data (dd/MM/yyyy):");
+        String descricao = JOptionPane.showInputDialog(frame, "Descrição do Evento:");
+
+        // Converte a data para LocalDate
+        LocalDate data = null;
+        if (dataStr != null && !dataStr.isEmpty()) {
+            data = LocalDate.parse(dataStr, Event.DATE_FORMATTER); // Converte string para LocalDate
+        }
+
+        if (nome != null && data != null && descricao != null) {
+            return new Event(nome, data, descricao); // Ajuste o construtor do evento
+        } else {
+            JOptionPane.showMessageDialog(frame, "Todos os campos devem ser preenchidos!");
+            return null;
+        }
+    }
+
+    private void addEvent() {
+        Event newEvent = collectEventData(); // Coleta os dados do evento
+        if (newEvent != null) {
+            eventController.addEvent(newEvent);
+            loadEvents(); // Atualiza a tabela após adicionar o evento
+            JOptionPane.showMessageDialog(frame, "Evento adicionado com sucesso!");
+        }
+    }
+
+    private void removeEvent() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) { // Verifica se uma linha foi selecionada
+            String nome = tableModel.getValueAt(selectedRow, 0).toString(); // Obtém o nome do evento selecionado
+            eventController.removeEvent(nome);
+            loadEvents(); // Atualiza a tabela após remover o evento
+            JOptionPane.showMessageDialog(frame, "Evento removido com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Selecione um evento para remover!");
+        }
+    }
+
+    private void generateEvent() {
+        Event randomEvent = eventController.generateRandomEvent(); // Gera um evento aleatório
+        if (randomEvent != null) { // Verifica se o evento gerado não é nulo
+            eventController.addEvent(randomEvent); // Adiciona o evento gerado
+            loadEvents(); // Atualiza a tabela
+            JOptionPane.showMessageDialog(frame, "Evento gerado e adicionado com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Não foi possível gerar um evento!");
+        }
+    }
+}
+
