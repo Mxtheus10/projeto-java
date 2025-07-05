@@ -24,6 +24,16 @@
             <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-controls</artifactId>
+    <version>21.0.1</version>
+</dependency>
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-fxml</artifactId>
+    <version>21.0.1</version>
+</dependency>
 
         <!-- Dependência do MySQL Connector (Corrigido) -->
         <dependency>
@@ -31,7 +41,14 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
         </dependency>
+    
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+      </dependency>
     </dependencies>
+    
 
     <build>
         <plugins>
@@ -45,7 +62,14 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
-
+  <plugin>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-maven-plugin</artifactId>
+    <version>0.0.8</version>
+    <configuration>
+      <mainClass>com.historiaevents.view.EventView</mainClass>
+    </configuration>
+  </plugin>
             <!-- Plugin para criar JAR e definir Main-Class -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -54,7 +78,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.historiaevents.MainApp</mainClass>
+                            <mainClass>com.historiaevents.view.MainApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -71,7 +95,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>com.historiaevents.MainApp</Main-Class>
+                            <Main-Class>com.historiaevents.view.MainApp</Main-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>

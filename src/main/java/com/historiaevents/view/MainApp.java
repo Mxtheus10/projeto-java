@@ -1,8 +1,7 @@
-package com.historiaevents;
+package com.historiaevents.view;
 
 import com.historiaevents.controller.EventController;
 import com.historiaevents.database.Database;
-import com.historiaevents.view.EventGUI;
 
 /**
  * Classe principal que inicializa a aplicação.

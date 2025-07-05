@@ -10,35 +10,53 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.historiaevents.dao.EventDAO;
 import com.historiaevents.database.Database;
-import com.historiaevents.model.Event;
+import com.historiaevents.model.EventBase;
 
 public class EventController {
+    private final EventDAO eventDAO = new EventDAO(); // ✅ Adicione essa linha!
+    private final List<EventBase> events = new ArrayList<>();
+
     private static final DateTimeFormatter SQL_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // Adiciona um evento ao banco de dados
-    public void addEvent(Event event) {
-        String sql = "INSERT INTO eventos(nome, data, descricao) VALUES(?, ?, ?)";
+    public void addEvent(EventBase event) {
+        String sql = "INSERT INTO eventos(nome, data, descricao, image_path, external_link) VALUES(?, ?, ?, ?, ?)";
 
         try (Connection conn = Database.getInstance().getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, event.getNome());
-            pstmt.setString(2, event.getData().format(SQL_DATE_FORMATTER));
-            pstmt.setString(3, event.getDescricao());
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, event.getName());
+            pstmt.setString(2, event.getDate().toString());
+            pstmt.setString(3, event.getDescription());
+            pstmt.setString(4, event.getImagePath());
+            pstmt.setString(5, event.getExternalLink());
+
             pstmt.executeUpdate();
-            System.out.println("Evento adicionado com sucesso!");
+
         } catch (SQLException e) {
             System.err.println("Erro ao adicionar evento: " + e.getMessage());
         }
     }
 
+    public void updateEvent(EventBase updatedEvent) {
+        eventDAO.updateEvent(updatedEvent);
+    }
+
+    public void deleteEvent(int id) {
+        eventDAO.removeEvent(id);
+    }
+
     // Remove múltiplos eventos pelo nome
     public void removeEvents(List<String> nomes) {
-        if (nomes.isEmpty()) return;
+        if (nomes.isEmpty())
+            return;
 
         String placeholders = String.join(",", nomes.stream().map(n -> "?").toArray(String[]::new));
 
-        String deleteAssociationsSQL = "DELETE FROM evento_pessoa WHERE evento_id IN (SELECT id FROM eventos WHERE nome IN (" + placeholders + "))";
+        String deleteAssociationsSQL = "DELETE FROM evento_pessoa WHERE evento_id IN (SELECT id FROM eventos WHERE nome IN ("
+                + placeholders + "))";
         String deleteEventSQL = "DELETE FROM eventos WHERE nome IN (" + placeholders + ")";
 
         try (Connection conn = Database.getInstance().getConnection()) {
@@ -73,12 +91,12 @@ public class EventController {
     }
 
     // Gera um evento aleatório
-    public Event generateRandomEvent() {
+    public EventBase generateRandomEvent() {
         String sql = "SELECT * FROM eventos ORDER BY RAND() LIMIT 1";
 
         try (Connection conn = Database.getInstance().getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             if (rs.next()) {
                 return createEventFromResultSet(rs);
@@ -92,13 +110,13 @@ public class EventController {
     }
 
     // Obtém todos os eventos
-    public List<Event> getAllEvents() {
-        List<Event> events = new ArrayList<>();
+    public List<EventBase> getAllEvents() {
+        List<EventBase> events = new ArrayList<>();
         String sql = "SELECT * FROM eventos";
 
         try (Connection conn = Database.getInstance().getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 events.add(createEventFromResultSet(rs));
@@ -109,12 +127,15 @@ public class EventController {
         return events;
     }
 
-    // Cria um objeto Event a partir do resultado do banco de dados
-    private Event createEventFromResultSet(ResultSet rs) throws SQLException {
-        return new Event(
+    // Cria um objeto EventBase a partir do resultado do banco de dados
+    private EventBase createEventFromResultSet(ResultSet rs) throws SQLException {
+        return new EventBase(
+                rs.getInt("id"),
                 rs.getString("nome"),
+                rs.getString("descricao"),
                 LocalDate.parse(rs.getString("data"), SQL_DATE_FORMATTER),
-                rs.getString("descricao")
-        );
+                rs.getString("image_path"),
+                rs.getString("external_link"));
     }
+
 }

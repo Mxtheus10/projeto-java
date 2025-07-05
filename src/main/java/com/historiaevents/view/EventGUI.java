@@ -20,7 +20,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.historiaevents.controller.EventController;
-import com.historiaevents.model.Event;
+import com.historiaevents.model.EventBase;
 
 /**
  * Classe responsável pela interface gráfica do usuário (GUI) para o gerenciador de eventos históricos.
@@ -85,11 +85,11 @@ public class EventGUI {
      */
     private void loadEvents() {
         tableModel.setRowCount(0); // Limpa a tabela antes de carregar os eventos
-        for (Event event : eventController.getAllEvents()) {
+        for (EventBase event : eventController.getAllEvents()) {
             tableModel.addRow(new Object[] {
-                    event.getNome(),
-                    event.getData().format(DATE_FORMATTER),
-                    event.getDescricao()
+                    event.getName(),
+                    event.getDate().format(DATE_FORMATTER),
+                    event.getDescription()
             });
         }
     }
@@ -97,7 +97,7 @@ public class EventGUI {
     /**
      * Coleta os dados de um novo evento a partir de inputs do usuário.
      */
-    private Event collectEventData() {
+    private EventBase collectEventData() {
         String nome;
         do {
             nome = JOptionPane.showInputDialog(frame, "Nome do Evento:");
@@ -123,14 +123,14 @@ public class EventGUI {
             if (descricao == null) return null;
         } while (descricao.trim().isEmpty());
 
-        return new Event(nome, data, descricao);
+        return new EventBase(0, nome, descricao, data);
     }
 
     /**
      * Adiciona um novo evento à lista e ao banco de dados.
      */
     private void addEvent() {
-        Event newEvent = collectEventData();
+        EventBase newEvent = collectEventData();
         if (newEvent != null) {
             eventController.addEvent(newEvent);
             loadEvents(); // Atualiza a interface gráfica
@@ -160,7 +160,7 @@ public class EventGUI {
      * Gera um evento aleatório e adiciona à lista.
      */
     private void generateEvent() {
-        Event randomEvent = eventController.generateRandomEvent();
+        EventBase randomEvent = eventController.generateRandomEvent();
         if (randomEvent != null) {
             eventController.addEvent(randomEvent);
             loadEvents();
@@ -176,7 +176,7 @@ public class EventGUI {
     private void shareEvent() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            Event event = getEventFromRow(selectedRow);
+            EventBase event = getEventFromRow(selectedRow);
             openWhatsApp(event);
         } else {
             JOptionPane.showMessageDialog(frame, "Selecione um evento para compartilhar!", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -186,21 +186,21 @@ public class EventGUI {
     /**
      * Obtém os detalhes do evento de uma linha selecionada na tabela.
      */
-    private Event getEventFromRow(int row) {
+    private EventBase getEventFromRow(int row) {
         String nome = tableModel.getValueAt(row, 0).toString();
         LocalDate data = LocalDate.parse(tableModel.getValueAt(row, 1).toString(), DATE_FORMATTER);
         String descricao = tableModel.getValueAt(row, 2).toString();
-        return new Event(nome, data, descricao);
+        return new EventBase(0, nome, descricao, data);
     }
 
     /**
      * Abre o WhatsApp Web para compartilhar o evento selecionado.
      */
-    private void openWhatsApp(Event event) {
+    private void openWhatsApp(EventBase event) {
         try {
-            String message = "🎉 Novo Evento: " + event.getNome() +
-                    "\n📅 Data: " + event.getData().format(DATE_FORMATTER) +
-                    "\n📝 Descrição: " + event.getDescricao();
+            String message = "🎉 Novo Evento: " + event.getName() +
+                    "\n📅 Data: " + event.getDate().format(DATE_FORMATTER) +
+                    "\n📝 Descrição: " + event.getDescription();
             String url = "https://api.whatsapp.com/send?text=" + URLEncoder.encode(message, StandardCharsets.UTF_8);
             Desktop.getDesktop().browse(new URI(url));
         } catch (Exception e) {
@@ -208,4 +208,3 @@ public class EventGUI {
         }
     }
 }
-
